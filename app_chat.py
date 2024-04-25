@@ -1,15 +1,16 @@
 import time
+import datetime
 import os
 import joblib
 import streamlit as st
+from decouple import config
 import google.generativeai as genai
 
-GOOGLE_API_KEY= os.getenv("GOOGLE_API_KEY")
+GOOGLE_API_KEY= config("GOOGLE_API_KEY")
 genai.configure(api_key=GOOGLE_API_KEY)
-
-new_chat_id = f'{time.time()}'
+new_chat_id = f'{datetime.datetime.now().strftime("%d %m  %Y %H:%M")}'
 MODEL_ROLE = 'ai'
-AI_AVATAR_ICON = ''
+AI_AVATAR_ICON = '🤖'
 
 # Create a data/ folder if it doesn't already exist
 try:
@@ -26,10 +27,10 @@ except:
 
 # Sidebar allows a list of past chats
 with st.sidebar:
-    st.write('# Past Chats')
+    st.write('# Chat History')
     if st.session_state.get('chat_id') is None:
         st.session_state.chat_id = st.selectbox(
-            label='Pick a past chat',
+            label='Check past chat history',
             options=[new_chat_id] + list(past_chats.keys()),
             format_func=lambda x: past_chats.get(x, 'New Chat'),
             placeholder='_',
@@ -47,7 +48,7 @@ with st.sidebar:
     # TODO: Give user a chance to name chat
     st.session_state.chat_title = f'ChatSession-{st.session_state.chat_id}'
 
-st.write('# Chat with AI')
+st.write('# can we chat?')
 
 # Chat history (allows to ask multiple questions)
 try:
